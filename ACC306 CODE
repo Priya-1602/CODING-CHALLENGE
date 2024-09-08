@@ -1,0 +1,100 @@
+//QUESTION 1
+def find_two_numbers(arr):
+    total_sum = sum(arr) 
+    unique_sum = sum(set(arr)) 
+    distinct_sum = 2 * unique_sum - total_sum 
+    seen = set()
+    for num in arr:
+        complement = distinct_sum - num
+        if complement in seen:
+            return sorted([num, complement])
+        seen.add(num)
+#test case 1
+N = 2
+arr = [1, 2, 3, 2, 1, 4]
+print(find_two_numbers(arr))  
+#test case2
+N = 1
+arr = [2, 1, 3, 2]
+print(find_two_numbers(arr))
+
+//QUESTION 2
+def word_break(s, dictionary):
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True  
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in dictionary:
+                dp[i] = True
+                break
+    return 1 if dp[n] else 0
+n = 6
+#test case1
+s = "ilike"
+dictionary = {"i", "like", "sam", "sung", "samsung", "mobile"}
+print(word_break(s, dictionary))
+
+s = "ilikesamsung"
+print(word_break(s, dictionary))
+
+//QUESTION 3
+def is_stepping_number(num): 
+    num_str = str(num)
+    for i in range(1, len(num_str)):
+        if abs(int(num_str[i]) - int(num_str[i - 1])) != 1:
+            return False
+    return True
+def find_stepping_numbers(n, m):
+    stepping_numbers = []
+    for num in range(n, m + 1):
+        if is_stepping_number(num):
+            stepping_numbers.append(num) 
+    return stepping_numbers
+n, m = map(int, input().split())
+stepping_numbers = find_stepping_numbers(n, m)
+print(' '.join(map(str, stepping_numbers)))
+
+//QUESTION 4
+def reduce_ticket_price(ticket: str, K: int) -> str:
+    stack = []
+    num_digits = len(ticket) 
+    for digit in ticket:
+        while K > 0 and stack and stack[-1] > digit:
+            stack.pop()  
+            K -= 1
+        stack.append(digit)
+    if K > 0:
+        stack = stack[:-K] 
+    result = ''.join(stack).lstrip('0') 
+    return result if result else "0"
+# Input
+ticket = input("TICKET=").strip()
+K = int(input("ENTER K=").strip())
+# Get the reduced ticket price
+result = reduce_ticket_price(ticket, K)
+# Output the result
+print(result)
+
+
+//QUESTION 5
+def getMaxToys(prices, money):
+    n = len(prices)
+    left = 0
+    current_sum = 0
+    max_toys = 0
+    for right in range(n):
+        current_sum += prices[right]
+        while current_sum > money:
+            current_sum -= prices[left]
+            left += 1
+        max_toys = max(max_toys, right - left + 1) 
+    return max_toys
+# Input
+n = int(input("ENTER NO.OF.TOYS:"))  
+prices = list(map(int, input("ENTER TOY PRICES:").split()))  
+money = int(input("ENTER BUDGET:"))  
+# Get the maximum number of toys
+result = getMaxToys(prices, money)
+# Output the result
+print(result)
